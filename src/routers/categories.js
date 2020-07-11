@@ -98,7 +98,7 @@ router.delete('/categories/:id', auth, async (req, res) => {
 })
 
 router.post('/categories/:id/addAcces', auth, async (req, res) => {
-    const email = req.query.emailToAddAcces
+    const email = req.body.email
     let user = undefined
     if (!email) {
         res.status(400).send('Nie podano adresu!')
