@@ -143,11 +143,9 @@ router.post('/categories/:id/addAcces', auth, async (req, res) => {
             return true
         })
         if (!justHaveAcces) {
-            console.log(user._id)
             const options = { change: req.body.change }
             categories.acces.push({ _id: user._id, email: user.email, options })
         }
-        console.log('a')
         await categories.save()
         res.send(categories)
     } catch (e) {
