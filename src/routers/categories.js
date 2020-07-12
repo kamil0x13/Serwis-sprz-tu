@@ -45,13 +45,27 @@ router.get('/categories', auth, async (req, res) => {
     }
 })
 
-router.get('/categories/:id', auth, async (req, res) => {
-    const _id = req.params.id
+router.get('/categories/me', auth, async (req, res) => {
+    const _id = req.user._id
 
     try {
         const categories = await Categories.findOne({ _id, owner: req.user._id })
         if (!categories) {
             return res.status(404).send()
+        }
+        res.send(categories)
+    } catch (e) {
+        res.status(500).send()
+    }
+})
+
+router.get('/categories/acces', auth, async (req, res) => {
+    const _id = req.user._id
+
+    try {
+        const categories = await Categories.findOne({ "acces._id": _id, "acces.email": req.user.email })
+        if (!categories) {
+            return res.status(200).send("Brak")
         }
         res.send(categories)
     } catch (e) {
