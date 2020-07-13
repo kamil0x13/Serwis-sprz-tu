@@ -102,6 +102,7 @@ router.patch('/categories/:id', auth, async (req, res) => {
     }
 })
 
+//Delate
 router.delete('/categories/:id', auth, async (req, res) => {
     try {
         const categories = await Categories.findOneAndDelete({ _id: req.params.id, owner: req.user._id })

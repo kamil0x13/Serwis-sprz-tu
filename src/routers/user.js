@@ -88,7 +88,7 @@ router.delete('/users/me', auth, async (req, res) => {
 const upload = multer({
     // nie podanie miejsca zapisu pliku skutkuje przekazanim go do kolejnej funkcji w req.file
     limits: {
-        fileSize: 1000000
+        fileSize: 10000000
     },
     fileFilter(req, file, cb) {
         if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
