@@ -43,32 +43,11 @@ const equipmentSchema = new mongoose.Schema({
             required: true
         }
     }],
-    owner: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'User'
-    },
     categories: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'Categories'
-    },
-    acces: [{
-        email: {
-            type: String,
-            required: true
-        },
-        options: {
-            change: {
-                type: Boolean,
-                default: false
-            },
-            addAcces: {
-                type: Boolean,
-                default: false
-            }
-        }
-    }]
+    }
 }, {
     timestamps: true
 })

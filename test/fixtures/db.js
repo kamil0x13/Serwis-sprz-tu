@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const User = require('../../src/models/user')
 const Categories = require('../../src/models/categories')
+const Equipment = require('../../src/models/equipment')
 
 const userOneId = new mongoose.Types.ObjectId()
 const userOne = {
@@ -48,15 +49,32 @@ const categoryThree = {
     owner: userOne._id
 }
 
+const equipmentOne = {
+    _id: new mongoose.Types.ObjectId(),
+    name: "First eq",
+    description: "1 eq",
+    categories: categoryOne._id
+}
+
+const equipmentTwo = {
+    _id: new mongoose.Types.ObjectId(),
+    name: "Second eq",
+    description: "2 eq",
+    categories: categoryTwo._id
+}
+
 
 const setupDatabase = async () => {
     await User.deleteMany()
     await Categories.deleteMany()
+    await Equipment.deleteMany()
     await new User(userOne).save()
     await new User(userTwo).save()
     await new Categories(categoryOne).save()
     await new Categories(categoryTwo).save()
     await new Categories(categoryThree).save()
+    await new Equipment(equipmentOne).save()
+    // await new Equipment(equipmentTwo).save()
 }
 
 module.exports = {
@@ -67,5 +85,7 @@ module.exports = {
     categoryOne,
     categoryTwo,
     categoryThree,
+    // equipmentOne,
+    // equipmentTwo,
     setupDatabase
 }
