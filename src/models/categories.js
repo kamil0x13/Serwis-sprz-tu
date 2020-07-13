@@ -18,9 +18,10 @@ const categoriesSchema = new mongoose.Schema({
         ref: 'User'
     },
     acces: [{
-        email: {
-            type: String,
-            required: true
+        owner: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: 'User'
         },
         options: {
             change: {

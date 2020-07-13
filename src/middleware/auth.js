@@ -19,7 +19,7 @@ const auth = async (req, res, next) => {
     }
 }
 
-const authCategory = async (req, res, next) => {
+const authOwnCategory = async (req, res, next) => {
     try {
         const categoryId = req.body.categoryId
 
@@ -34,7 +34,29 @@ const authCategory = async (req, res, next) => {
     }
 }
 
+const authAccesedCategory = async (req, res, next) => {
+    try {
+        const categoryId = req.body.categoryId
+
+        const category = await req.user.populate({
+            path: 'categories_accesed'
+        }).execPopulate()
+        req.category = req.user.categories_accesed.find((cat) => {
+            if (cat._id.toString() === categoryId.toString()) {
+                return true
+            }
+        })
+        if (!req.category) {
+            throw new Error()
+        }
+        next()
+    } catch (e) {
+        res.status(401).send({ error: 'Please authenticate category.' })
+    }
+}
+
 module.exports = {
     auth,
-    authCategory
+    authOwnCategory,
+    authAccesedCategory
 }

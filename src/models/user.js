@@ -68,12 +68,6 @@ userSchema.virtual('categories_accesed', {
     foreignField: 'acces._id' // nazwa pola z _id w task
 })
 
-userSchema.virtual('equipment', {
-    ref: 'Equipment',
-    localField: '_id', // nazwa pola łączącego 
-    foreignField: 'owner' // nazwa pola z _id w task
-})
-
 
 //Metody dostępne na instancjach (.methods)
 
