@@ -37,6 +37,13 @@ const categoriesSchema = new mongoose.Schema({
     timestamps: true
 })
 
+//Tworzenie relacji
+categoriesSchema.virtual('equipment', {
+    ref: 'Equipment',
+    localField: '_id', // nazwa pola łączącego 
+    foreignField: 'categories' // nazwa pola z _id w task
+})
+
 const Categories = mongoose.model('Categories', categoriesSchema)
 
 module.exports = Categories

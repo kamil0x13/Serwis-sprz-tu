@@ -4,7 +4,7 @@ const auth = require('../middleware/auth')
 const User = require('../models/user')
 const router = new express.Router()
 
-
+//Create
 router.post('/categories', auth, async (req, res) => {
     const categories = new Categories({
         ...req.body,
@@ -19,9 +19,10 @@ router.post('/categories', auth, async (req, res) => {
     }
 })
 
-//GET // {{url}}/tasks?limit=2&skip=1&completed=true
-//GET // {{url}}/tasks?sortBy=createdAt:desc
-router.get('/categories', auth, async (req, res) => {
+//Get own categories sorted
+//GET // {{url}}/categories/me?limit=2&skip=1&completed=true
+//GET // {{url}}/categories/me?sortBy=createdAt:desc
+router.get('/categories/me', auth, async (req, res) => {
     const sort = {}
 
     if (req.query.sortBy) {
@@ -45,20 +46,22 @@ router.get('/categories', auth, async (req, res) => {
     }
 })
 
+//Get own categories
 router.get('/categories/me', auth, async (req, res) => {
     const _id = req.user._id
 
     try {
-        const categories = await Categories.findOne({ _id, owner: req.user._id })
-        if (!categories) {
-            return res.status(404).send()
-        }
-        res.send(categories)
+        //const categories = await Categories.findOne({ _id, owner: req.user._id })
+        await req.user.populate({
+            path: 'categories'
+        }).execPopulate()
+        res.send(req.user.categories)
     } catch (e) {
         res.status(500).send()
     }
 })
 
+//Get accesed categories
 router.get('/categories/acces', auth, async (req, res) => {
     const _id = req.user._id
 
@@ -73,6 +76,7 @@ router.get('/categories/acces', auth, async (req, res) => {
     }
 })
 
+//Uppdate
 router.patch('/categories/:id', auth, async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['description', 'name', 'acces']
@@ -111,6 +115,7 @@ router.delete('/categories/:id', auth, async (req, res) => {
     }
 })
 
+//Add access
 router.post('/categories/:id/addAcces', auth, async (req, res) => {
     const email = req.body.email
     let user = undefined
