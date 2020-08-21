@@ -45,7 +45,7 @@ router.get('/equipment/acces', auth, authAccesedCategory, async (req, res) => {
     }
 })
 
-//Update
+//Update own
 router.patch('/equipment/own', auth, authOwnCategory, async (req, res) => {
     // const equipment = await Equipment.findOne({ _id: req.body.equipmentId, categories: req.category._id })
     // if (!equipment) {
@@ -74,6 +74,57 @@ router.patch('/equipment/own', auth, authOwnCategory, async (req, res) => {
         equipment.save()
         res.send()
 
+    } catch (e) {
+        res.status(500).send()
+    }
+})
+
+//Update acces
+router.patch('/equipment/acces', auth, authAccesedCategory, async (req, res) => {
+    try {
+        await req.category.populate({
+            path: 'equipment'
+        }).execPopulate()
+        const equipment = req.category.equipment.find((eq) => {
+            if (eq._id === req.body.equipmentId) {
+                return true
+            }
+        })
+        if (!equipment) {
+            res.status(404).send()
+        }
+        if (req.body.name) {
+            equipment.name = req.body.name
+        }
+
+        if (req.body.description) {
+            equipment.description = req.body.description
+        }
+
+        equipment.save()
+        res.send()
+
+    } catch (e) {
+        res.status(500).send()
+    }
+})
+
+//Remove own
+router.delete('/equipment/own', auth, authOwnCategory, async (req, res) => {
+    try {
+        await req.category.populate({
+            path: 'equipment'
+        }).execPopulate()
+        const equipment = req.category.equipment.find((eq) => {
+            if (eq._id === req.body.equipmentId) {
+                return true
+            }
+        })
+        if (!equipment) {
+            res.status(404).send()
+        }
+        await equipment.remove()
+        res.send()
     } catch (e) {
         res.status(500).send()
     }

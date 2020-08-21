@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logowanie</title>
+</head>
+
+<body>
+    <header>Serwis Sprzętu</header>
+
+    <main>
+        <form id='login-form'>
+            <label>Login</label>
+            <input type="text" name='email' placeholder="login" id="login-email">
+            <label>Hasło</label>
+            <input type="password" name='password' placeholder="hasło" id="login-password">
+            <input type="submit" value='Zaloguj'>
+            <label id='Errors'></label>
+        </form>
+    </main>
+
+    <script>
+        $loginForm = document.getElementById('login-form')
+        $loginForm.addEventListener('submit', (e) => {
+            e.preventDefault()
+
+            const email = document.getElementById('login-email').value
+            const password = document.getElementById('login-password').value
+
+            fetch('http://localhost:3000/users/login', {
+                method: "post",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: email, password: password })
+            }).then((res) => {
+                return res.json()
+            }).then((text) => {
+                localStorage.setItem('jwt', text.token)
+                window.location.replace('konto.html')
+            }).catch((e) => {
+                document.getElementById('Errors').innerHTML = "Błędne dane logowania"
+                console.log(e)
+            })
+            //pietrzakkamil013@gmail.com Bluase12#3
+        })
+    </script>
+
+</body>
+
+</html>
